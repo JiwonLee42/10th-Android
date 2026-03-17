@@ -7,4 +7,9 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="emotion_happy">#FFEFB6</color>
+    <color name="emotion_excited">#CEE7F5</color>
+    <color name="emotion_normal">#BEC3ED</color>
+    <color name="emotion_anxious">#B1D3B9</color>
+    <color name="emotion_angry">#EB8B8B</color>
 </resources>
