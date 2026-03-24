@@ -1,11 +1,11 @@
 package com.example.and_practice.main
 
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.and_practice.R
 import com.example.and_practice.databinding.ActivityMainBinding
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.navOptions
 import androidx.navigation.ui.setupWithNavController
 
 class MainActivity : AppCompatActivity() {
@@ -15,10 +15,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        enableEdgeToEdge()
+
         // 바인딩 초기화
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Intent 꺼내기
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.main_fragmentContainer) as NavHostFragment
         val navController = navHostFragment.navController
