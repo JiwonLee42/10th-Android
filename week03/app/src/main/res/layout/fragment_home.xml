@@ -1,0 +1,61 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/home_title"
+            android:textSize="28sp"
+            android:layout_marginHorizontal="41dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="10dp"/>
+
+        <TextView
+            android:id="@+id/subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/home_subtitle"
+            android:textSize="16sp"
+            android:textColor="@color/gray"
+            android:layout_marginHorizontal="41dp"
+            android:layout_marginBottom="50dp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/home_logo"
+            android:layout_marginHorizontal="17dp"
+            android:layout_marginBottom="40dp"/>
+
+        <TextView
+            android:id="@+id/recent_section_small_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="What's new"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingHorizontal="42dp"
+            android:layout_marginStart="16dp" />
+
+        <TextView
+            android:id="@+id/recent_section_big_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="나이키 최신 상품"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:paddingHorizontal="42dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp" />
+
+        <include layout="@layout/fragment_recent_product_list"/>
+    </LinearLayout>
+</ScrollView>
