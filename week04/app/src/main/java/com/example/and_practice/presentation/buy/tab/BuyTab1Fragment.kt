@@ -140,27 +140,19 @@ class BuyTab1Fragment : Fragment() {
     private fun toggleProductLike(product: ProductData) {
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
             val targetProduct = productDao.getById(product.id) ?: return@launch
+            val updatedIsLiked = !targetProduct.isLiked
 
             // isLiked가 true된 상태로 타켓 프로덕트를 업데이트
             productDao.updateProduct(
-                targetProduct.copy(isLiked = !targetProduct.isLiked)
+                targetProduct.copy(isLiked = updatedIsLiked)
             )
 
-            val updatedProductList = productDao.getAll().map {
-                ProductData(
-                    id = it.id,
-                    badge = if (it.badgeType == BadgeType.BEST_SELLER.name) {
-                        BadgeType.BEST_SELLER
-                    } else {
-                        null
-                    },
-                    name = it.name,
-                    subName = it.content,
-                    colorCount = it.color,
-                    price = it.price,
-                    productImage = it.imageUrl,
-                    isLiked = it.isLiked
-                )
+            val updatedProductList = productAdapter.currentList.map {
+                if (it.id == product.id) {
+                    it.copy(isLiked = updatedIsLiked)
+                } else {
+                    it
+                }
             }
 
             withContext(Dispatchers.Main) {
