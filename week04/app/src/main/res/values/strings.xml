@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">And_practice</string>
+    <string name="hello_android">Hello Android!</string>
+    <string name="home_nav">홈</string>
+    <string name="buy_nav">구매하기</string>
+    <string name="wish_nav">위시리스트</string>
+    <string name="cart_nav">장바구니</string>
+    <string name="profile_nav">프로필</string>
+    <string name="home_title">Discover</string>
+    <string name="home_subtitle">9월 4일 목요일</string>
+    <string name="buy_tab_1">전체</string>
+    <string name="buy_tab_2"><![CDATA[Tops & T-Shirts]]></string>
+    <string name="buy_tab_3">Shoes</string>
+    <string name="wish_title">위시리스트</string>
+    <string name="cart_text1">장바구니가 비어 있습니다.</string>
+    <string name="cart_text2">제품을 추가하면 여기에 표시됩니다.</string>
+</resources>
