@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.And_practice" parent="Theme.AppCompat.Light.NoActionBar" />
+    <style name="BottomNav_NoIndicator">
+        <item name="color">@android:color/transparent</item>
+    </style>
+</resources>
