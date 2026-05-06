@@ -8,25 +8,22 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import com.example.and_practice.data.remote.api.toApiError
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.and_practice.R
 import com.example.and_practice.databinding.FragmentProfileBinding
-import com.example.and_practice.data.remote.dto.UpdateMyProfileRequestDTO
-import com.example.and_practice.domain.repository.ProfileRepository
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
-    @Inject
-    lateinit var repository: ProfileRepository
-
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: ProfileViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,64 +56,44 @@ class ProfileFragment : Fragment() {
                 .setPositiveButton("저장") { _, _ ->
                     val nickname = editText.text.toString().trim()
                     if (nickname.isBlank()) return@setPositiveButton
-                    updateNickname(nickname)
+                    viewModel.updateNickname(nickname)
                 }
                 .setNegativeButton("취소", null)
                 .show()
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            loadProfile(adapter)
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.uiState.collect { state ->
+                        binding.profileNameTv.text = state.nickname
+                        adapter.submitList(state.followings)
+                        binding.profileFollowingTitleTv.text = getString(
+                            R.string.profile_following_title_format,
+                            state.followings.size
+                        )
+                    }
+                }
+
+                launch {
+                    viewModel.eventState.collect { event ->
+                        when (event) {
+                            is ProfileEventState.ShowError -> {
+                                Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
+                            }
+
+                            ProfileEventState.ProfileUpdated -> {
+                                Toast.makeText(requireContext(), "저장됐어요", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private suspend fun loadProfile(adapter: FollowingPreviewAdapter) {
-        runCatching { repository.getMyProfile() }
-            .onSuccess { profile ->
-                val followings = profile.followings.map {
-                    FollowingPreviewData(
-                        id = it.userId,
-                        imageUrl = it.profileImageUrl
-                    )
-                }
-
-                binding.profileNameTv.text = profile.nickname
-                adapter.submitList(followings)
-                binding.profileFollowingTitleTv.text = getString(
-                    R.string.profile_following_title_format,
-                    followings.size
-                )
-            }
-            .onFailure { throwable ->
-                Toast.makeText(
-                    requireContext(),
-                    throwable.toApiError().defaultMessage,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-    }
-
-    private fun updateNickname(nickname: String) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            runCatching {
-                repository.updateMyProfile(UpdateMyProfileRequestDTO(nickname = nickname))
-            }
-                .onSuccess {
-                    binding.profileNameTv.text = nickname
-                    Toast.makeText(requireContext(), "저장됐어요", Toast.LENGTH_SHORT).show()
-                }
-                .onFailure { throwable ->
-                    Toast.makeText(
-                        requireContext(),
-                        throwable.toApiError().defaultMessage,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-        }
     }
 }
